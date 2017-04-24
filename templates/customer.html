@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+
+<body>
+
+<div>
+  <h1>Welcome {{username}}</h1>
+</div>
+<div>
+  <span>My Flight</span>
+  <table>
+    <th>Ticket ID</th>
+    <th>Post</th>
+    {% for line in posts %}
+    <tr>
+      <td>{{line.ticket_id}}</td>
+    </tr>
+    {% endfor %}
+  </table>  
+</div>
+<div>
+  <span>Purchase</span>
+</div>
+<div>
+  <span>Search Flight</span>
+</div>    
+
+
+
+<a href="/logout">Logout</a>
+
+</body>
+
+</html>

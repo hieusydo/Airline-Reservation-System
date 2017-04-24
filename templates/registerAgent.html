@@ -1,0 +1,20 @@
+<html>
+<head>
+</head>
+<body>
+<form action="/registerAuthAgent" method="POST">
+  <input type="text" name = "email" placeholder="email" required/> </br>
+  <input type="password" name = "password" placeholder="password" required/></br>
+  <input type="number" name = "booking_agent_id" placeholder="booking_agent_id" required/></br>
+  <input type="submit" value = Register />
+  {% if error %}
+    <p class="error"><strong>Error:</strong> {{error}}</p>
+  {% endif %}
+</form>
+
+<a href="/">Go back</a>
+
+</body>
+
+
+</html>

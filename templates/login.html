@@ -1,0 +1,22 @@
+<html>
+<head>
+</head>
+<body>
+<form action="/loginAuth" method="POST">
+	<input type="text" name = "username" placeholder="username or email" required/> </br>
+	<input type="password" name = "password" placeholder="password" required/></br>
+  <input type="radio" name="usrtype" value="customer"> Customer
+  <input type="radio" name="usrtype" value="agent"> Booking Agent
+  <input type="radio" name="usrtype" value="staff"> Airline Staff <br>
+	<input type="submit" value = Login />
+	{% if error %}
+		<p class="error"><strong>Error:</strong> {{error}}</p>
+	{% endif %}
+</form>
+
+<a href="/">Go back</a>
+
+</body>
+
+
+</html>

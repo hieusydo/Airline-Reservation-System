@@ -1,0 +1,29 @@
+<html>
+<head>
+</head>
+<body>
+<form action="/registerAuthCustomer" method="POST">
+  <input type="text" name = "email" placeholder="email" required/> </br>
+  <input type="text" name = "name" placeholder="name" required/> </br>
+	<input type="password" name = "password" placeholder="password" required/></br>
+  <input type="text" name = "building_number" placeholder="building_number" required/></br>
+  <input type="text" name = "street" placeholder="street" required/></br>
+  <input type="text" name = "city" placeholder="city" required/></br>
+  <input type="text" name = "state" placeholder="state" required/></br>
+  <input type="number" name = "phone_number" placeholder="phone_number" required/></br>
+  <input type="text" name = "passport_number" placeholder="passport_number" required/></br>
+  <input type="date" name = "passport_expiration" placeholder="passport_expiration" required/></br>
+  <input type="text" name = "passport_country" placeholder="passport_country" required/></br>
+  <input type="date" name = "date_of_birth" placeholder="date_of_birth" required/></br>
+	<input type="submit" value = Register />
+	{% if error %}
+		<p class="error"><strong>Error:</strong> {{error}}</p>
+	{% endif %}
+</form>
+
+<a href="/">Go back</a>
+
+</body>
+
+
+</html>
