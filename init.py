@@ -174,7 +174,12 @@ def home():
 def customerHome():
   username = session['username']
   cursor = conn.cursor();
-  query = 'SELECT ticket_id FROM purchases WHERE customer_email = %s'
+  query = 'SELECT purchases.ticket_id, ticket.airline_name, ticket.flight_num, departure_airport, departure_time, arrival_airport, arrival_time \
+  FROM purchases, ticket, flight \
+  WHERE purchases.ticket_id = ticket.ticket_id \
+  AND ticket.airline_name = flight.airline_name \
+  AND ticket.flight_num = flight.flight_num \
+  AND customer_email = %s AND departure_time > curdate()'
   cursor.execute(query, (username))
   data = cursor.fetchall()
   cursor.close()  
@@ -186,7 +191,18 @@ def staffHome():
 
 @app.route('/agentHome')
 def agentHome():
-  return render_template('agent.html')
+  username = session['username']
+  cursor = conn.cursor();
+  query = 'SELECT purchases.ticket_id, ticket.airline_name, ticket.flight_num, departure_airport, departure_time, arrival_airport, arrival_time \
+  FROM purchases, ticket, flight \
+  WHERE purchases.ticket_id = ticket.ticket_id \
+  AND ticket.airline_name = flight.airline_name \
+  AND ticket.flight_num = flight.flight_num \
+  AND customer_email = %s AND departure_time > curdate()'
+  cursor.execute(query, (username))
+  data = cursor.fetchall()
+  cursor.close()  
+  return render_template('agent.html', username=username, posts=data)
 
 @app.route('/post', methods=['GET', 'POST'])
 def post():

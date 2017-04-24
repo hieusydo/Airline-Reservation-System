@@ -12,10 +12,19 @@
   <span>My Flight</span>
   <table>
     <th>Ticket ID</th>
-    <th>Post</th>
+    <th>Flight</th>
+    <th>Departure Airport</th>
+    <th>Departure Time</th>
+    <th>Arrival Airport</th>
+    <th>Arrival Time</th>
     {% for line in posts %}
     <tr>
       <td>{{line.ticket_id}}</td>
+      <td>{{line.airline_name}} {{line.flight_num}}</td>
+      <td>{{line.departure_airport}}</td>
+      <td>{{line.departure_time}}</td>
+      <td>{{line.arrival_airport}}</td>
+      <td>{{line.arrival_time}}</td>
     </tr>
     {% endfor %}
   </table>  
