@@ -21,6 +21,10 @@
   <a href="/registerStaff">New Staff</a>   
 </div>
 
+{% if error %}
+	<p class="error"><strong>Error:</strong> {{error}}</p>
+{% endif %}
+
 </body>
 
 </html>
