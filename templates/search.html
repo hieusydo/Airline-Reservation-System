@@ -1,0 +1,38 @@
+<html>
+<head>
+</head>
+<body>
+
+<h1>Search by city, airport, or date</h1>
+
+<form action="/searchFlights/city" method="POST">
+	
+	Search by city (arrival or departure)</br>
+	<input type="text" name = "citysearchbox" placeholder="search by city" required/> </br>
+	<input type="submit" value = Search />
+
+</form>
+
+<form action="/searchFlights/airport" method="POST">
+
+        Search by airport (arrival or departure)</br>
+	<input type="text" name = "airportsearchbox" placeholder="search by airport" required/> </br>
+	<input type="submit" value = Search />
+
+</form>
+
+
+<form action="/searchFlights/date" method="POST">
+
+    Search by date (arrival or departure)</br>
+    <input type="text" name = "datesearchbox" placeholder="mm/dd/yyyy" required/> </br>
+    <input type="submit" value = Search />
+
+</form>
+
+{% if error %}
+	<p class="error"><strong>Error:</strong> {{error}}</p>
+{% endif %}
+
+</body>
+</html>

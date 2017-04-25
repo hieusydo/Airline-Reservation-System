@@ -1,0 +1,63 @@
+from flask import Flask, render_template, request
+import pymysql.cursors
+import time
+
+from appdef import app, conn
+
+@app.route('/search')
+def searchpage():
+    return render_template('search.html')
+
+@app.route('/searchFlights/city', methods=['POST'])
+def searchForCity():
+    cursor = conn.cursor()
+    searchtext = request.form['citysearchbox']
+    query = 'select * from flight,airport where (airport.airport_name=flight.departure_airport or airport.airport_name=flight.arrival_airport) and airport.airport_city=%s and status="upcoming"'
+    cursor.execute(query, (searchtext))
+    data = cursor.fetchall()
+    cursor.close()
+    error = None
+    if(data):
+        return render_template('searchFlights.html', results=data)
+    else:
+        #returns an error message to the html page
+        error = 'No results found'
+        return render_template('search.html', error=error)
+
+@app.route('/searchFlights/airport', methods=['POST'])
+def searchForAirport():
+    cursor = conn.cursor()
+    searchtext = request.form['airportsearchbox']
+    query = 'select * from flight where (departure_airport = %s or arrival_airport = %s) and status="upcoming"'
+    cursor.execute(query, (searchtext, searchtext))
+    data = cursor.fetchall()
+    cursor.close()
+    error = None
+    if(data):
+        return render_template('searchFlights.html', results=data)
+    else:
+        #returns an error message to the html page
+        error = 'No results found'
+        return render_template('search.html', error=error)
+
+@app.route('/searchFlights/date', methods=['POST'])
+def searchForDate():
+    cursor = conn.cursor()
+    searchtext = request.form['datesearchbox']
+    try:
+        valid_date = time.strptime(searchtext, '%m/%d/%Y')
+    except ValueError:
+        error = 'Invalid date entered'
+        return render_template('search.html', error=error)
+    
+    query = 'select * from flight where (departure_time between %s and "%s 23:59:59" or arrival_time between %s and "%s 23:59:59") and status="upcoming"'
+    cursor.execute(query, (searchtext, searchtext, searchtext, searchtext))
+    data = cursor.fetchall()
+    cursor.close()
+    error = None
+    if(data):
+        return render_template('searchFlights.html', results=data)
+    else:
+        #returns an error message to the html page
+        error = 'No results found'
+        return render_template('search.html', error=error)
