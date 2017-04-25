@@ -45,13 +45,13 @@ def searchForDate():
     cursor = conn.cursor()
     searchtext = request.form['datesearchbox']
     try:
-        valid_date = time.strptime(searchtext, '%m/%d/%Y')
+        valid_date = time.strptime(searchtext, '%Y/%m/%d')
     except ValueError:
         error = 'Invalid date entered'
         return render_template('search.html', error=error)
     
-    query = 'select * from flight where (departure_time between %s and "%s 23:59:59" or arrival_time between %s and "%s 23:59:59") and status="upcoming"'
-    cursor.execute(query, (searchtext, searchtext, searchtext, searchtext))
+    query = 'select * from flight where (date(departure_time) = %s or date(arrival_time) = %s) and status="upcoming"'
+    cursor.execute(query, (searchtext, searchtext))
     data = cursor.fetchall()
     cursor.close()
     error = None
