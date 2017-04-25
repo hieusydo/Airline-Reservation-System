@@ -4,6 +4,7 @@ import pymysql.cursors
 
 from appdef import app, conn
 import publicinfo
+import staff
 
 #Define a route to hello function
 @app.route('/')
@@ -174,10 +175,6 @@ def customerHome():
   data = cursor.fetchall()
   cursor.close()  
   return render_template('customer.html', username=username, posts=data)
-    
-@app.route('/staffHome')
-def staffHome():
-  return render_template('staff.html')
 
 @app.route('/agentHome')
 def agentHome():
