@@ -5,6 +5,7 @@ import pymysql.cursors
 app = Flask(__name__)
 
 #Configure MySQL
+# For MAMP on Mac, add the port or unix_socket AND pwd = "root"
 conn = pymysql.connect(host='localhost',
                        user='root',
                        password='root',
