@@ -66,6 +66,55 @@ def changeFlightStatus():
     
     return redirect(url_for('staffHome', message="Operation Successful"))
     
+@app.route('/staffHome/addAirplane')
+def addAirplanePage():
+    if authenticateStaff():
+        error = request.args.get('error')
+        return render_template('addAirplane.html', error=error)
+    else:
+        error = 'Invalid Credentials'
+        return redirect(url_for('errorpage', error=error))
+
+@app.route('/staffHome/addAirplane/confirm', methods=['POST'])
+def addAirplane():
+    if not authenticateStaff():
+        error = 'Invalid Credentials'
+        return redirect(url_for('errorpage', error=error))
+    
+    username = session['username']
+    
+    planeid = request.form['id']
+    seats = request.form['seats']
+    
+    #Check if planeid is not taken
+    cursor = conn.cursor()
+    query = 'select * from airplane where airplane_id = %s'
+    cursor.execute(query, (planeid))
+    data = cursor.fetchall()
+    
+    if data:
+        error = "Airplane ID already taken"
+        return redirect(url_for('addAirplanePage', error=error))
+    
+    #Get the airline the airplane is associated with
+    query = 'select airline_name from airline_staff where username = %s'
+    cursor.execute(query, (username))
+    #fetchall returns an array, each element is a dictionary
+    airline = cursor.fetchall()[0]['airline_name']
+    
+    #Insert the airplane
+    query = 'insert into airplane values (%s, %s, %s)'
+    cursor.execute(query, (airline, planeid, seats))
+    conn.commit()
+    
+    #Get a full list of airplanes
+    query = 'select * from airplane'
+    cursor.execute(query)
+    data = cursor.fetchall()
+    cursor.close()
+    
+    return render_template('addAirplaneConfirm.html', results=data)
+
 @app.route('/staffHome/addAirport')
 def addAirportPage():
     if authenticateStaff():

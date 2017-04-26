@@ -1,0 +1,34 @@
+<html>
+<head>
+</head>
+<body>
+<h2>Operation Successful</h2>
+
+<style type="text/css">
+	table, th, td{
+		border: 1px solid black;
+	}
+</style>
+
+<table>
+	<th>airline_name</th>
+	<th>airplane_id</th>
+	<th>seats</th>
+	
+{% for line in results %}
+	<tr>
+		<td>{{line.airline_name}}</td>
+		<td>{{line.airplane_id}}</td>
+		<td>{{line.seats}}</td>
+	</tr>
+{% endfor %}
+</table>
+</br>
+
+
+<a href="/staffHome">Go back</a>
+
+</body>
+
+
+</html>
