@@ -108,8 +108,8 @@ def addAirplane():
     conn.commit()
     
     #Get a full list of airplanes
-    query = 'select * from airplane'
-    cursor.execute(query)
+    query = 'select * from airplane where airline_name = %s'
+    cursor.execute(query, (airline))
     data = cursor.fetchall()
     cursor.close()
     
