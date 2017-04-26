@@ -4,13 +4,18 @@
 </head>
 
 <body>
+
+{% if message %}
+    <h2>{{message}}</h2>
+{% endif %}
+
 <div>
   <h1>Welcome {{username}}</h1>
 </div>
 
 View Flights <br/>
 Create Flight <br/>
-Change Flight Status <br/>
+<a href="/staffHome/changeFlight">Change Flight Status</a> <br/>
 Add Airplane <br/>
 Add Airport <br/>
 View Booking Agents <br/>
@@ -18,8 +23,6 @@ View Customers <br/>
 View Reports <br/>
 <br/>
 <a href="/logout"> Logout </a><br/>
-
-<a href="/">Go back</a>
 
 </body>
 
