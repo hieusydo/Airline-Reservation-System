@@ -1,0 +1,24 @@
+<html>
+<head>
+</head>
+<body>
+<h2>Change Flight Status</h2>
+
+<form action="/staffHome/changeFlight/Auth" method="POST">
+  <input type="text" name = "flightnum" placeholder="Flight Number" required/> </br>
+  <input type="radio" name="status" value="Upcoming"> Upcoming
+  <input type="radio" name="status" value="Delayed"> Delayed
+  <input type="radio" name="status" value="In-Progress"> In Progress
+  <input type="radio" name="status" value="Arrived"> Arrived <br><br>
+  <input type="submit" value = Update />
+	{% if error %}
+		<p class="error"><strong>Error:</strong> {{error}}</p>
+	{% endif %}
+</form>
+
+<a href="/">Go back</a>
+
+</body>
+
+
+</html>
