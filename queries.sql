@@ -14,3 +14,13 @@ AND purchases.booking_agent_id = booking_agent.booking_agent_id
 AND booking_agent.email = %s AND departure_time > curdate()
 
 -- Find flight based on arrival and departure city/time
+SELECT * FROM flight, airport 
+WHERE airport.airport_name=flight.departure_airport 
+AND airport.airport_city = %s 
+AND airport.airport_name = %s
+AND flight.departure_time BETWEEN %s AND %s
+AND (airline_name, flight_num) in 
+  (SELECT airline_name, flight_num FROM flight, airport 
+  WHERE airport.airport_name=flight.arrival_airport
+  AND airport.airport_city = %s 
+  AND airport.airport_name = %s)
