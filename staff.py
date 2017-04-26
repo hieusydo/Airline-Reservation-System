@@ -27,7 +27,10 @@ def authenticateStaff():
 @app.route('/staffHome')
 def staffHome():
     if authenticateStaff():
-        return render_template('staff.html')
+        username = session['username']
+        message = request.args.get('message')
+        
+        return render_template('staff.html', username=username, message=message)
     else:
         error = 'Invalid Credentials'
         return redirect(url_for('errorpage', error=error))
@@ -35,7 +38,8 @@ def staffHome():
 @app.route('/staffHome/changeFlight')
 def changeFlightStatusPage():
     if authenticateStaff():
-        return render_template('changeFlight.html')
+        error = request.args.get('error')
+        return render_template('changeFlight.html', error=error)
     else:
         error = 'Invalid Credentials'
         return redirect(url_for('errorpage', error=error))
@@ -52,7 +56,7 @@ def changeFlightStatus():
     status = request.form['status']
     if not status:
         error = 'Did not select new status'
-        return render_template('staffHome/changeFlight', error=error)
+        return redirect(url_for('changeFlightStatusPage', error=error))
     
     cursor = conn.cursor()
     query = 'update flight set status=%s where flight_num=%s'
@@ -60,5 +64,5 @@ def changeFlightStatus():
     conn.commit()
     cursor.close()
     
-    return render_template('staff.html', message="Operation Successful", username=username)
+    return redirect(url_for('staffHome', message="Operation Successful"))
     
