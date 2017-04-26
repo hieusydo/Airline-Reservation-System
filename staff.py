@@ -66,3 +66,30 @@ def changeFlightStatus():
     
     return redirect(url_for('staffHome', message="Operation Successful"))
     
+@app.route('/staffHome/addAirport')
+def addAirportPage():
+    if authenticateStaff():
+        error = request.args.get('error')
+        return render_template('addAirport.html', error=error)
+    else:
+        error = 'Invalid Credentials'
+        return redirect(url_for('errorpage', error=error))
+
+@app.route('/staffHome/addAirport/Auth', methods=['POST'])
+def addAirport():
+    if not authenticateStaff():
+        error = 'Invalid Credentials'
+        return redirect(url_for('errorpage', error=error))
+    
+    username = session['username']
+    
+    name = request.form['name']
+    city = request.form['city']
+    
+    cursor = conn.cursor()
+    query = 'insert into airport values (%s, %s)'
+    cursor.execute(query, (name, city))
+    conn.commit()
+    cursor.close()
+    
+    return redirect(url_for('staffHome', message="Operation Successful"))
