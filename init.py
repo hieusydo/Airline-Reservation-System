@@ -9,6 +9,7 @@ import publicinfo
 import customer
 import agent
 import staff
+import purchase
 
 #Define a route to hello function
 @app.route('/')

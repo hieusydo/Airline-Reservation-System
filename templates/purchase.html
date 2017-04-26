@@ -4,8 +4,8 @@
 </head>
 
 <body>
-
-<form action="/searchCustomer" method="POST">
+Where are you going? 
+<form action="/searchPurchase" method="POST">
   From <br>
   <input type="text" name = "fromcity" placeholder="city" required>
   <input type="text" name = "fromairport" placeholder="airport" required>
@@ -13,10 +13,11 @@
   To <br>
   <input type="text" name = "tocity" placeholder="city" required>
   <input type="text" name = "toairport" placeholder="airport" required>
-  <input type="date" name = "todate" placeholder="date" required> <br>
+  <input type="date" name = "todate" placeholder="date" required> <br> 
   <input type="submit" value = Search />
 </form>
 
+These are the flights available based on your chosen options
 <table>
   <th>airline_line</th>
   <th>flight_num</th>
@@ -25,7 +26,6 @@
   <th>arrival_airport</th>
   <th>arrival_time</th>
   <th>price</th>
-  <th>status</th>
   <th>airplane_id</th>
   
 {% for line in results %}
@@ -35,13 +35,19 @@
     <td>{{line.departure_airport}}</td>
     <td>{{line.departure_time}}</td>
     <td>{{line.arrival_airport}}</td>
-    <td>{{line.arrivale_time}}</td>
+    <td>{{line.arrival_time}}</td>
     <td>{{line.price}}</td>
-    <td>{{line.status}}</td>
     <td>{{line.airplane_id}}</td>
   </tr>
 {% endfor %}
 </table>
+
+<form action="/purchase" method="POST">
+  Choose your flight <br>
+  <input type="text" name = "airline_name" placeholder="airline_name" required>
+  <input type="text" name = "flight_num" placeholder="flight_num" required> <br> 
+  <input type="submit" value = Purchase />
+</form>
 
 <a href="/searchPageCustomer">Search again</a>
 <a href="/customerHome">Go back to home</a>
