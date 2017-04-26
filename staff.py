@@ -58,7 +58,22 @@ def changeFlightStatus():
         error = 'Did not select new status'
         return redirect(url_for('changeFlightStatusPage', error=error))
     
+    #Get the airline the airplane is associated with
     cursor = conn.cursor()
+    query = 'select airline_name from airline_staff where username = %s'
+    cursor.execute(query, (username))
+    #fetchall returns an array, each element is a dictionary
+    airline = cursor.fetchall()[0]['airline_name']
+    
+    #Check that the flight is from the same airline as the staff
+    query = 'select * from flight where flight_num = %s and airline_name = %s'
+    cursor.execute(query, (flightnum, airline))
+    data = cursor.fetchall()
+    if not data:
+        error = 'Incorrect permission - can only change flights from your airline'
+        return redirect(url_for('changeFlightStatusPage', error=error))
+    
+    #Update the specified flight
     query = 'update flight set status=%s where flight_num=%s'
     cursor.execute(query, (status, flightnum))
     conn.commit()
