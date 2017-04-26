@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 import pymysql.cursors
 import time
 
@@ -6,7 +6,8 @@ from appdef import app, conn
 
 @app.route('/search')
 def searchpage():
-    return render_template('search.html')
+    error = request.args.get('error')
+    return render_template('search.html', error=error)
 
 @app.route('/searchFlights/city', methods=['POST'])
 def searchForCity():
@@ -22,7 +23,7 @@ def searchForCity():
     else:
         #returns an error message to the html page
         error = 'No results found'
-        return render_template('search.html', error=error)
+        return redirect(url_for('searchpage', error=error))
 
 @app.route('/searchFlights/airport', methods=['POST'])
 def searchForAirport():
@@ -38,7 +39,7 @@ def searchForAirport():
     else:
         #returns an error message to the html page
         error = 'No results found'
-        return render_template('search.html', error=error)
+        return redirect(url_for('searchpage', error=error))
 
 @app.route('/searchFlights/date', methods=['POST'])
 def searchForDate():
@@ -48,7 +49,7 @@ def searchForDate():
         valid_date = time.strptime(searchtext, '%Y/%m/%d')
     except ValueError:
         error = 'Invalid date entered'
-        return render_template('search.html', error=error)
+        return redirect(url_for('searchpage', error=error))
     
     query = 'select * from flight where (date(departure_time) = %s or date(arrival_time) = %s) and status="upcoming"'
     cursor.execute(query, (searchtext, searchtext))
@@ -60,4 +61,4 @@ def searchForDate():
     else:
         #returns an error message to the html page
         error = 'No results found'
-        return render_template('search.html', error=error)
+        return redirect(url_for('searchpage', error=error))
