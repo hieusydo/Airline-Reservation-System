@@ -5,7 +5,7 @@
 
 <body>
 Where are you going? 
-<form action="/searchPurchase" method="POST">
+<form action="/searchPurchaseAgent" method="POST">
   From <br>
   <input type="text" name = "fromcity" placeholder="city" required>
   <input type="text" name = "fromairport" placeholder="airport" required>
@@ -19,7 +19,7 @@ Where are you going?
 
 These are the flights available based on your chosen options
 <table>
-  <th>airline_line</th>
+  <th>airline_name</th>
   <th>flight_num</th>
   <th>departure_airport</th>
   <th>departure_time</th>
@@ -42,14 +42,16 @@ These are the flights available based on your chosen options
 {% endfor %}
 </table>
 
-<form action="/purchase" method="POST">
+<form action="/purchaseAgent" method="POST">
+  Who are you buying for? <br>
+  <input type="text" name = "customer_email" placeholder="customer_email" required> <br>
   Choose your flight <br>
   <input type="text" name = "airline_name" placeholder="airline_name" required>
   <input type="text" name = "flight_num" placeholder="flight_num" required> <br> 
   <input type="submit" value = Purchase />
 </form>
 
-<a href="/customerHome">Go back to my home</a>
+<a href="/agentHome">Go back to my home</a>
 
 </body>
 

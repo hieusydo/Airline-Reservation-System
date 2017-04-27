@@ -8,8 +8,9 @@
   <h1>Welcome {{username}}</h1>
 </div>
 <div>
-  <span>My Flight</span>
+  <span>Upcoming Flight(s)</span>
   <table>
+    <th>Customer</th>
     <th>Ticket ID</th>
     <th>Flight</th>
     <th>Departure Airport</th>
@@ -18,6 +19,7 @@
     <th>Arrival Time</th>
     {% for line in posts %}
     <tr>
+      <td>{{line.customer_email}}</td>
       <td>{{line.ticket_id}}</td>
       <td>{{line.airline_name}} {{line.flight_num}}</td>
       <td>{{line.departure_airport}}</td>
@@ -29,18 +31,16 @@
   </table>   
 </div>
 <div>
-  <span>Purchase</span>
+  <a href="/purchasePageAgent">Purchase</a>
 </div>
 <div>
-  <span>Search Flight</span>
+  <a href="">Search Flight</a>
 </div>    
 <div>
-  <span>View Commission</span>
+  <a href="">View Commission</a>
 </div>      
-<div>
-  <span>Logout</span>
-</div>
-<a href="/">Go back</a>
+
+<a href="/logout">Logout</a>
 
 </body>
 
