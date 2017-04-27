@@ -34,10 +34,26 @@
   <a href="/purchasePageAgent">Purchase</a>
 </div>
 <div>
-  <a href="">Search Flight</a>
+  <a href="/searchPageAgent">Search Flight</a>
 </div>    
 <div>
   <a href="">View Commission</a>
+  <div>
+    <span>Total amount of commission received in the past 30 days:</span> {{totalComm}} <br>
+    <span>Average commission received per ticket booked in the past 30 days:</span> {{avgComm}} <br>
+    <span>Total number of tickets sold in the past 30 days</span>: {{ticketCount}}<br>
+  </div>
+
+  <div>
+    <form action="/commission" method="POST">
+    From 
+    <input type="date" name = "fromdate" placeholder="date" required> <br>
+    To
+    <input type="date" name = "todate" placeholder="date" required> <br> 
+    <input type="submit" value=View>   
+    </form>
+  </div>
+
 </div>      
 
 <a href="/logout">Logout</a>
