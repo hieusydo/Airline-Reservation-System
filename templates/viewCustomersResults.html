@@ -1,0 +1,28 @@
+<html>
+<head>
+</head>
+<body>
+<style type="text/css">
+	table, th, td{
+		border: 1px solid black;
+	}
+</style>
+
+<b>Flights Taken By {{customer}}</b>
+
+<table>
+	<th>Flight Number</th>
+	
+{% for line in results %}
+	<tr>
+		<td>{{line.flight_num}}</td>
+	</tr>
+{% endfor %}
+</table>
+
+<a href="/staffHome/viewCustomers">Search again</a>
+
+</body>
+
+
+</html>

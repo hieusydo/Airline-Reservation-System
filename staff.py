@@ -366,3 +366,38 @@ def viewAgentsCommission():
     else:
         error = "Invalid Credentials"
         return redirect(url_for('errorpage', error=error))
+
+@app.route('/staffHome/viewCustomers')
+def viewCustomersPage():
+    if authenticateStaff():
+        airline = getStaffAirline()
+        
+        cursor = conn.cursor()
+        query = 'select email,count(ticket_id) as customerpurchases from customer, (purchases natural join ticket) where customer.email=purchases.customer_email and airline_name=%s and purchase_date >= date_sub(curdate(), interval 1 year) group by email having count(ticket_id) > all (select count(ticket_id) from customer,purchases where customer.email=purchases.customer_email group by email and purchase_date >= date_sub(curdate(), interval 1 year))'
+        cursor.execute(query, (airline))
+        data = cursor.fetchall()
+        cursor.close()
+        
+        error = request.args.get('error')
+        return render_template('viewCustomers.html', error=error, results=data)
+    else:
+        error = "Invalid Credentials"
+        return redirect(url_for('errorpage', error=error))
+
+@app.route('/staffHome/viewCustomers/result', methods=['POST'])
+def viewCustomers():
+    if authenticateStaff():
+        airline = getStaffAirline()
+        customer = request.form['email']
+        
+        cursor = conn.cursor()
+        query = 'select distinct flight_num from purchases natural join ticket where airline_name = %s and customer_email=%s'
+        cursor.execute(query, (airline, customer))
+        data = cursor.fetchall()
+        cursor.close()
+        
+        return render_template('viewCustomersResult.html', results=data, customer=customer)
+        
+    else:
+        error = "Invalid Credentials"
+        return redirect(url_for('errorpage', error=error))
