@@ -35,6 +35,65 @@ def staffHome():
         error = 'Invalid Credentials'
         return redirect(url_for('errorpage', error=error))
 
+@app.route('/staffHome/createFlight')
+def createFlightPage():
+    if authenticateStaff():
+        cursor = conn.cursor()
+        query = 'select airport_name from airport'
+        cursor.execute(query)
+        airportdata = cursor.fetchall()
+        
+        query = 'select airplane_id from airplane'
+        cursor.execute(query)
+        airplanedata = cursor.fetchall()
+        
+        cursor.close()
+        
+        error = request.args.get('error')
+        return render_template('createFlight.html', error=error, airportdata=airportdata, airplanedata=airplanedata)
+    else:
+        error = 'Invalid Credentials'
+        return redirect(url_for('errorpage', error=error))
+
+@app.route('/staffHome/createFlight/Auth', methods=['POST'])
+def createFlight():
+    if not authenticateStaff():
+        error = 'Invalid Credentials'
+        return redirect(url_for('errorpage', error=error))
+    
+    username = session['username']
+    
+    flightnum = request.form['flightnum']
+    departport = request.form['departport']
+    departtime = request.form['departtime']
+    arriveport = request.form['arriveport']
+    arrivetime = request.form['arrivetime']
+    price = request.form['price']
+    status = request.form['status']
+    airplaneid = request.form['airplanenum']
+    
+    #Check that airplane is valid
+    cursor = conn.cursor()
+    query = 'select * from airplane where airplane_id = %s'
+    cursor.execute(query, (airplaneid))
+    data = cursor.fetchall()
+    if not data:
+        error = 'Invalid Airplane ID'
+        return redirect(url_for('createFlightPage', error=error))
+    
+    #Get the airline the staff is associated with
+    query = 'select airline_name from airline_staff where username = %s'
+    cursor.execute(query, (username))
+    #fetchall returns an array, each element is a dictionary
+    airline = cursor.fetchall()[0]['airline_name']
+    
+    query = 'insert into flight values (%s, %s, %s, %s, %s, %s, %s, %s, %s)'
+    cursor.execute(query, (airline, flightnum, departport, departtime, arriveport, arrivetime, price, status, airplaneid))
+    conn.commit()
+    cursor.close()
+    
+    return redirect(url_for('staffHome', message="Operation Successful"))
+
 @app.route('/staffHome/changeFlight')
 def changeFlightStatusPage():
     if authenticateStaff():
