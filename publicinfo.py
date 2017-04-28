@@ -43,16 +43,12 @@ def searchForAirport():
 
 @app.route('/searchFlights/date', methods=['POST'])
 def searchForDate():
-    cursor = conn.cursor()
-    searchtext = request.form['datesearchbox']
-    try:
-        valid_date = time.strptime(searchtext, '%Y/%m/%d')
-    except ValueError:
-        error = 'Invalid date entered'
-        return redirect(url_for('searchpage', error=error))
+    begintime = request.form['begintime']
+    endtime = request.form['endtime']
     
-    query = 'select * from flight where (date(departure_time) = %s or date(arrival_time) = %s) and status="upcoming"'
-    cursor.execute(query, (searchtext, searchtext))
+    cursor = conn.cursor()
+    query = 'select * from flight where ((departure_time between %s and %s) or (arrival_time between %s and %s)) and status="upcoming"'
+    cursor.execute(query, (begintime, endtime, begintime, endtime))
     data = cursor.fetchall()
     cursor.close()
     error = None
