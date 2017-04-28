@@ -3,6 +3,19 @@ import pymysql.cursors
 
 from appdef import *
 
+#Get the airline the staff member works for
+def getStaffAirline():
+    username = session['username']
+    cursor = conn.cursor()
+    #username is a primary key
+    query = 'select airline_name from airline_staff where username = %s'
+    cursor.execute(query, (username))
+    #fetchall returns an array, each element is a dictionary
+    airline = cursor.fetchall()[0]['airline_name']
+    cursor.close()
+    
+    return airline
+
 #Make sure that the user is actually staff before performing any operations
 def authenticateStaff():
     username = ""
@@ -34,7 +47,91 @@ def staffHome():
     else:
         error = 'Invalid Credentials'
         return redirect(url_for('errorpage', error=error))
+    
+@app.route('/staffHome/searchFlights')
+def searchFlightsPage():
+    if authenticateStaff():
+        cursor = conn.cursor()
+        
+        airline = getStaffAirline()
+        
+        query = 'select * from flight where airline_name = %s and ((departure_time between curdate() and date_add(curdate(), interval 30 day)) or (arrival_time between curdate() and date_add(curdate(), interval 30 day)))'
+        cursor.execute(query, (airline))
+        data = cursor.fetchall()
+        
+        cursor.close()
+        
+        error = request.args.get('error')
+        return render_template('searchStaff.html', error=error, results=data)
+    else:
+        error = 'Invalid Credentials'
+        return redirect(url_for('errorpage', error=error))
 
+@app.route('/staffHome/searchFlights/city', methods=['POST'])
+def searchFlightsCity():
+    if authenticateStaff():
+        cursor = conn.cursor()
+        city = request.form['citysearchbox']
+        airline = getStaffAirline()
+        query = 'select * from flight,airport where (airport.airport_name=flight.departure_airport or airport.airport_name=flight.arrival_airport) and airport.airport_city=%s and airline_name=%s'
+        cursor.execute(query, (city, airline))
+        data = cursor.fetchall()
+        cursor.close()
+        error = None
+        if(data):
+            return render_template('searchStaffResults.html', results=data)
+        else:
+            #returns an error message to the html page
+            error = 'No results found'
+            return redirect(url_for('searchFlightsPage', error=error))
+    else:
+        error = 'Invalid Credentials'
+        return redirect(url_for('errorpage', error=error))
+
+@app.route('/staffHome/searchFlights/airport', methods=['POST'])
+def searchFlightsAirport():
+    if authenticateStaff():
+        cursor = conn.cursor()
+        airport = request.form['airportsearchbox']
+        airline = getStaffAirline()
+        query = 'select * from flight where (departure_airport = %s or arrival_airport = %s) and airline_name=%s'
+        cursor.execute(query, (airport, airport, airline))
+        data = cursor.fetchall()
+        cursor.close()
+        error = None
+        if(data):
+            return render_template('searchStaffResults.html', results=data)
+        else:
+            #returns an error message to the html page
+            error = 'No results found'
+            return redirect(url_for('searchFlightsPage', error=error))
+    else:
+        error = 'Invalid Credentials'
+        return redirect(url_for('errorpage', error=error))
+    
+@app.route('/staffHome/searchFlights/date', methods=['POST'])
+def searchFlightsDate():
+    if authenticateStaff():
+        begintime = request.form['begintime']
+        endtime = request.form['endtime']
+        airline = getStaffAirline()
+        
+        cursor = conn.cursor()
+        query = 'select * from flight where ((departure_time between %s and %s) or (arrival_time between %s and %s)) and airline_name=%s'
+        cursor.execute(query, (begintime, endtime, begintime, endtime, airline))
+        data = cursor.fetchall()
+        cursor.close()
+        error = None
+        if(data):
+            return render_template('searchStaffResults.html', results=data)
+        else:
+            #returns an error message to the html page
+            error = 'No results found'
+            return redirect(url_for('searchStaffPage', error=error))
+    else:
+        error = 'Invalid Credentials'
+        return redirect(url_for('errorpage', error=error))
+    
 @app.route('/staffHome/createFlight')
 def createFlightPage():
     if authenticateStaff():
@@ -71,6 +168,7 @@ def createFlight():
     price = request.form['price']
     status = request.form['status']
     airplaneid = request.form['airplanenum']
+    airline = getStaffAirline()
     
     #Check that airplane is valid
     cursor = conn.cursor()
@@ -80,12 +178,6 @@ def createFlight():
     if not data:
         error = 'Invalid Airplane ID'
         return redirect(url_for('createFlightPage', error=error))
-    
-    #Get the airline the staff is associated with
-    query = 'select airline_name from airline_staff where username = %s'
-    cursor.execute(query, (username))
-    #fetchall returns an array, each element is a dictionary
-    airline = cursor.fetchall()[0]['airline_name']
     
     query = 'insert into flight values (%s, %s, %s, %s, %s, %s, %s, %s, %s)'
     cursor.execute(query, (airline, flightnum, departport, departtime, arriveport, arrivetime, price, status, airplaneid))
@@ -117,12 +209,7 @@ def changeFlightStatus():
         error = 'Did not select new status'
         return redirect(url_for('changeFlightStatusPage', error=error))
     
-    #Get the airline the airplane is associated with
-    cursor = conn.cursor()
-    query = 'select airline_name from airline_staff where username = %s'
-    cursor.execute(query, (username))
-    #fetchall returns an array, each element is a dictionary
-    airline = cursor.fetchall()[0]['airline_name']
+    airline = getStaffAirline()
     
     #Check that the flight is from the same airline as the staff
     query = 'select * from flight where flight_num = %s and airline_name = %s'
@@ -159,6 +246,7 @@ def addAirplane():
     
     planeid = request.form['id']
     seats = request.form['seats']
+    airline = getStaffAirline()
     
     #Check if planeid is not taken
     cursor = conn.cursor()
@@ -169,12 +257,6 @@ def addAirplane():
     if data:
         error = "Airplane ID already taken"
         return redirect(url_for('addAirplanePage', error=error))
-    
-    #Get the airline the airplane is associated with
-    query = 'select airline_name from airline_staff where username = %s'
-    cursor.execute(query, (username))
-    #fetchall returns an array, each element is a dictionary
-    airline = cursor.fetchall()[0]['airline_name']
     
     #Insert the airplane
     query = 'insert into airplane values (%s, %s, %s)'
