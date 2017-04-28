@@ -13,7 +13,7 @@ def searchpage():
 def searchForCity():
     cursor = conn.cursor()
     searchtext = request.form['citysearchbox']
-    query = 'select * from flight,airport where (airport.airport_name=flight.departure_airport or airport.airport_name=flight.arrival_airport) and airport.airport_city=%s and status="upcoming"'
+    query = 'select * from flight,airport where (airport.airport_name=flight.departure_airport or airport.airport_name=flight.arrival_airport) and airport.airport_city=%s and (departure_time >= curtime() or arrival_time >= curtime())'
     cursor.execute(query, (searchtext))
     data = cursor.fetchall()
     cursor.close()
@@ -29,7 +29,7 @@ def searchForCity():
 def searchForAirport():
     cursor = conn.cursor()
     searchtext = request.form['airportsearchbox']
-    query = 'select * from flight where (departure_airport = %s or arrival_airport = %s) and status="upcoming"'
+    query = 'select * from flight where (departure_airport = %s or arrival_airport = %s) and (departure_time >= curtime() or arrival_time >= curtime())'
     cursor.execute(query, (searchtext, searchtext))
     data = cursor.fetchall()
     cursor.close()
@@ -47,7 +47,7 @@ def searchForDate():
     endtime = request.form['endtime']
     
     cursor = conn.cursor()
-    query = 'select * from flight where ((departure_time between %s and %s) or (arrival_time between %s and %s)) and status="upcoming"'
+    query = 'select * from flight where ((departure_time between %s and %s) or (arrival_time between %s and %s)) and (departure_time >= curtime() or arrival_time >= curtime())'
     cursor.execute(query, (begintime, endtime, begintime, endtime))
     data = cursor.fetchall()
     cursor.close()
