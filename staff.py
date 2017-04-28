@@ -319,3 +319,50 @@ def addAirport():
     cursor.close()
     
     return redirect(url_for('staffHome', message="Operation Successful"))
+
+@app.route('/staffHome/viewAgents')
+def viewAgentsPage():
+    if authenticateStaff():
+        error = request.args.get('error')
+        return render_template('viewAgents.html', error=error)
+    else:
+        error = "Invalid Credentials"
+        return redirect(url_for('errorpage', error=error))
+
+@app.route('/staffHome/viewAgents/sales', methods=['POST'])
+def viewAgentsSales():
+    if authenticateStaff():
+        daterange = request.form['range']
+        airline = getStaffAirline()
+        
+        cursor = conn.cursor()
+        query = 'select email,count(ticket_id) as sales from booking_agent natural join purchases natural join ticket where purchase_date >= date_sub(curdate(), interval 1 ' + daterange + ') and airline_name=%s group by email order by sales'
+        cursor.execute(query, (airline))
+        data = cursor.fetchall()
+        cursor.close()
+        
+        #Use only the top 5 sellers
+        #Python will not break if we try to access a range that extends beyond the end of the array
+        return render_template('viewAgentsSales.html', results = data[0:5], date=daterange)
+        
+    else:
+        error = "Invalid Credentials"
+        return redirect(url_for('errorpage', error=error))
+
+@app.route('/staffHome/viewAgents/commission')
+def viewAgentsCommission():
+    if authenticateStaff():
+        airline = getStaffAirline()
+        
+        cursor = conn.cursor()
+        query = 'select email,sum(flight.price)*0.1 as commission from booking_agent natural join purchases natural join ticket natural join flight where purchase_date >= date_sub(curdate(), interval 1 year) and airline_name=%s group by email order by commission'
+        cursor.execute(query, (airline))
+        data = cursor.fetchall()
+        cursor.close()
+        
+        #Use only the top 5 sellers
+        #Python will not break if we try to access a range that extends beyond the end of the array
+        return render_template('viewAgentsCommission.html', results = data[0:5])
+    else:
+        error = "Invalid Credentials"
+        return redirect(url_for('errorpage', error=error))

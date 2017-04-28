@@ -1,0 +1,29 @@
+<html>
+<head>
+</head>
+<body>
+
+<h2>View Booking Agents</h2>
+
+<form action="/staffHome/viewAgents/sales" method="POST">
+
+    View Top 5 by Ticket Sales</br>
+    <input type="radio" name="range" value="month" required> Past Month
+    <input type="radio" name="range" value="year" required> Past Year</br>
+    <input type="submit" value = Go />
+
+</form>
+
+<a href="/staffHome/viewAgents/commission">View Top 5 by Commission</a></br>
+
+{% if error %}
+        <p class="error"><strong>Error:</strong> {{error}}</p>
+{% endif %}
+
+</br>
+<a href="/staffHome">Go back</a>
+
+</body>
+
+
+</html>
