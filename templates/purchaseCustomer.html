@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>purchaseAgent</title>
+  <title>purchaseCustomer</title>
 </head>
 
 <style type="text/css" media="screen">
@@ -12,8 +12,8 @@
 
 <body>
 <h1>Purchase</h1>
-<h3>1. Where are you going?</h3>
-<form action="/searchPurchaseAgent" method="POST">
+<h3>1. Where are you going? </h3>
+<form action="/searchPurchaseCustomer" method="POST">
   From <br>
   <input type="text" name = "fromcity" placeholder="city" required>
   <input type="text" name = "fromairport" placeholder="airport" required>
@@ -21,7 +21,7 @@
   To <br>
   <input type="text" name = "tocity" placeholder="city" required>
   <input type="text" name = "toairport" placeholder="airport" required>
-  <input type="date" name = "todate" placeholder="date" required> <br> <br>
+  <input type="date" name = "todate" placeholder="date" required> <br><br>
   <input type="submit" value = Search />
 </form>
 
@@ -49,21 +49,23 @@
   </tr>
 {% endfor %}
 </table>
+
 {% if searchError %}
   <p class="error"><strong>Error:</strong> {{searchError}}</p>
 {% endif %}
+<br>
 
-<h3>3. Purchase the flight</h3>
-<form action="/purchaseAgent" method="POST">
-  Who are you buying for? <br>
-  <input type="text" name = "customer_email" placeholder="customer_email" required> <br><br>
-  Choose the flight <br>
-  <input type="text" name = "airline_name" placeholder="airline_name" required>
-  <input type="text" name = "flight_num" placeholder="flight_num" required> <br> <br>
+<h3>3. Choose your flight</h3>
+<form action="/purchaseCustomer" method="POST">
+  Airline Name <br><input type="text" name = "airline_name" placeholder="airline_name" required><br><br>
+  Flight Number <br><input type="text" name = "flight_num" placeholder="flight_num" required> <br><br>
   <input type="submit" value = Purchase />
-</form>
-<br><br>
-<a href="/agentHome">Go back to my homepage</a>
+</form> <br><br>
+<!-- {% if purchaseError %}
+  <p class="error"><strong>Error:</strong> {{purchaseError}}</p>
+{% endif %} -->
+
+<a href="/customerHome">Go back to my homepage</a>
 
 </body>
 

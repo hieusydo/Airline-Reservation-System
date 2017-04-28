@@ -13,7 +13,8 @@ def agentHome():
   AND ticket.airline_name = flight.airline_name \
   AND ticket.flight_num = flight.flight_num \
   AND booking_agent.email = %s AND booking_agent.booking_agent_id = purchases.booking_agent_id \
-  AND departure_time > curdate()'
+  AND departure_time > curdate() \
+  ORDER BY customer_email'
   cursor.execute(query, (username))
   data = cursor.fetchall()
 
@@ -30,8 +31,9 @@ def agentHome():
   cursor.execute(queryGetCommission, agentID['booking_agent_id'])
   totalComm = cursor.fetchone()
   totalCommVal = 0
-  if totalComm != None:
-    totalCommVal = totalComm['totalComm']  
+  if totalComm['totalComm'] != None:
+    totalCommVal = ticketCount['ticketCount']
+  # print totalComm 
   # Get total tickets in the past 30 days 
   queryGetTicketCount = 'SELECT count(*) as ticketCount FROM purchases, ticket, flight \
                         WHERE purchases.ticket_id = ticket.ticket_id \
@@ -40,10 +42,10 @@ def agentHome():
                         AND purchases.booking_agent_id = %s'
   cursor.execute(queryGetTicketCount, agentID['booking_agent_id'])
   ticketCount = cursor.fetchone()
-  ticketCountVal = 0
+  ticketCountVal = ticketCount['ticketCount']
   avgComm = 0
-  if ticketCount != None:
-    ticketCountVal = ticketCount['ticketCount']                         
+  # print ticketCount, totalCommVal
+  if ticketCountVal != 0:
     avgComm = totalCommVal/ticketCountVal
 
   cursor.close()  
@@ -113,7 +115,7 @@ def commission():
   cursor.execute(queryGetCommission, (fromdate, todate, agentID['booking_agent_id']))
   totalComm = cursor.fetchone()
   totalCommVal = 0
-  if totalComm != None:
+  if totalComm['totalComm'] != None:
     totalCommVal = totalComm['totalComm']
   # print('~~~DEBUG:: ', totalComm)
   # Get total tickets in the past 30 days 
@@ -124,13 +126,11 @@ def commission():
                         AND purchases.booking_agent_id = %s'
   cursor.execute(queryGetTicketCount, (fromdate, todate, agentID['booking_agent_id']))
   ticketCount = cursor.fetchone()
-  ticketCountVal = 0
-  if ticketCount != None:
-    ticketCountVal = ticketCount['ticketCount']  
+  ticketCountVal = ticketCount['ticketCount']  
   # print('~~~DEBUG: ', ticketCount)
   # avgComm = totalComm/ticketCount
   cursor.close()
-  return render_template('commission.html', totalComm=totalCommVal, ticketCount=ticketCountVal)
+  return render_template('commission.html', fromdate=fromdate, todate=todate, totalComm=totalCommVal, ticketCount=ticketCountVal)
 
 
 

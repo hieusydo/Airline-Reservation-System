@@ -1,10 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <title>searchCustomer</title>
 </head>
 
-<body>
+<style type="text/css" media="screen">
+  table, th, td{
+    border: 1px solid black;
+  }
+</style>
 
+<body>
+<h1>Search from All Flights</h1>
 <form action="/searchCustomer" method="POST">
   From <br>
   <input type="text" name = "fromcity" placeholder="city" required>
@@ -16,17 +23,17 @@
   <input type="date" name = "todate" placeholder="date" required> <br>
   <input type="submit" value = Search />
 </form>
-
+<br><br>
 <table>
-  <th>airline_line</th>
-  <th>flight_num</th>
-  <th>departure_airport</th>
-  <th>departure_time</th>
-  <th>arrival_airport</th>
-  <th>arrival_time</th>
-  <th>price</th>
-  <th>status</th>
-  <th>airplane_id</th>
+  <th>Airline Name</th>
+  <th>Flight Number</th>
+  <th>Departure Airport</th>
+  <th>Departure Time</th>
+  <th>Arrival Airport</th>
+  <th>Arrival Time</th>
+  <th>Price</th>
+  <th>Status</th>
+  <th>Airplane ID</th>
   
 {% for line in results %}
   <tr>
@@ -41,7 +48,11 @@
     <td>{{line.airplane_id}}</td>
   </tr>
 {% endfor %}
-</table>
+</table> 
+{% if error %}
+  <p class="error"><strong>Error:</strong> {{error}}</p>
+{% endif %}
+<br><br>
 
 <a href="/searchPageCustomer">Search again</a>
 <a href="/customerHome">Go back to my home page</a>

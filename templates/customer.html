@@ -3,13 +3,18 @@
 <head>
 </head>
 
-<body>
+<style type="text/css" media="screen">
+  table, th, td{
+    border: 1px solid black;
+  }
+</style>
 
+<body>
 <div>
   <h1>Welcome {{username}}</h1>
 </div>
 <div>
-  <span>My Upcoming Flight(s)</span>
+  <h3>My Upcoming Flight(s)</h3>
   <table>
     <th>Ticket ID</th>
     <th>Flight</th>
@@ -30,10 +35,10 @@
   </table>  
 </div>
 <div>
-  <a href="/purchasePage">Purchase</a>
+  <h3><a href="/purchasePageCustomer">Purchase</a></h3>
 </div>
 <div>
-  <a href="/searchPageCustomer">Search from All Flights</a>
+  <h3><a href="/searchPageCustomer">Search from All Flights</a></h3>
 </div>    
 
 <a href="/logout">Logout</a>

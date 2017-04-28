@@ -1,20 +1,22 @@
 <html>
 <head>
+  <title>registerCustomer</title>
 </head>
 <body>
+<h1>Register as Customer</h1>
 <form action="/registerAuthCustomer" method="POST">
-  <input type="text" name = "email" placeholder="email" required/> </br>
-  <input type="text" name = "name" placeholder="name" required/> </br>
-	<input type="password" name = "password" placeholder="password" required/></br>
-  <input type="text" name = "building_number" placeholder="building_number" required/></br>
-  <input type="text" name = "street" placeholder="street" required/></br>
-  <input type="text" name = "city" placeholder="city" required/></br>
-  <input type="text" name = "state" placeholder="state" required/></br>
-  <input type="number" name = "phone_number" placeholder="phone_number" required/></br>
-  <input type="text" name = "passport_number" placeholder="passport_number" required/></br>
-  <input type="date" name = "passport_expiration" placeholder="passport_expiration" required/></br>
-  <input type="text" name = "passport_country" placeholder="passport_country" required/></br>
-  <input type="date" name = "date_of_birth" placeholder="date_of_birth" required/></br>
+  Email <br><input type="text" name = "email" placeholder="email" required/> </br><br>
+  Name <br><input type="text" name = "name" placeholder="name" required/> </br><br>
+	Password <br><input type="password" name = "password" placeholder="password" required/></br><br>
+  Building Number <br><input type="text" name = "building_number" placeholder="building_number" required/></br><br>
+  Street <br><input type="text" name = "street" placeholder="street" required/></br><br>
+  City  <br><input type="text" name = "city" placeholder="city" required/></br><br>
+  State <br><input type="text" name = "state" placeholder="state" required/></br><br>
+  Phone Number <br><input type="number" name = "phone_number" placeholder="phone_number" required/></br><br>
+  Passport Number <br><input type="text" name = "passport_number" placeholder="passport_number" required/></br><br> 
+  Passport Expiration <br><input type="date" name = "passport_expiration" placeholder="passport_expiration" required/></br><br>
+  Passport Country <br><input type="text" name = "passport_country" placeholder="passport_country" required/></br><br>
+  Date of Birth <br><input type="date" name = "date_of_birth" placeholder="date_of_birth" required/></br><br>
 	<input type="submit" value = Register />
 	{% if error %}
 		<p class="error"><strong>Error:</strong> {{error}}</p>

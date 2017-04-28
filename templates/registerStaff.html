@@ -1,20 +1,23 @@
 <html>
 <head>
+  <title>registerStaff</title>
 </head>
 <body>
+<h1>Register as Staff</h1>
 <form action="/registerAuthStaff" method="POST">
-  <input type="text" name = "username" placeholder="username" required/> </br>
-  <input type="password" name = "password" placeholder="password" required/></br>
-  <input type="text" name="first_name" placeholder="first_name" required><br>
-  <input type="text" name="last_name" placeholder="last_name" required><br>
-  <input type="date" name="date_of_birth" placeholder="date_of_birth" required><br>
-  <input type="text" name="airline_name" placeholder="airline_name" required><br>
+  Username <br><input type="text" name = "username" placeholder="username" required/> </br><br>
+  Password <br><input type="password" name = "password" placeholder="password" required/></br><br>
+  First Name <br><input type="text" name="first_name" placeholder="first_name" required><br><br>
+  Last Name <br><input type="text" name="last_name" placeholder="last_name" required><br><br>
+  Date of Birth <br><input type="date" name="date_of_birth" placeholder="date_of_birth" required><br><br>
+  Airline Name <br><input type="text" name="airline_name" placeholder="airline_name" required><br><br>
   <input type="submit" value = Register />
   {% if error %}
     <p class="error"><strong>Error:</strong> {{error}}</p>
   {% endif %}
 </form>
 
+<br><br>
 <a href="/">Go back</a>
 
 </body>

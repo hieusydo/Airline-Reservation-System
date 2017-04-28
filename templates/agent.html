@@ -1,14 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <title>agent</title>
 </head>
+
+<style type="text/css" media="screen">
+  table, th, td{
+    border: 1px solid black;
+  }
+</style>
 
 <body>
 <div>
   <h1>Welcome {{username}}</h1>
 </div>
 <div>
-  <span>Upcoming Flight(s)</span>
+  <h3>Upcoming Flight(s)</h3>
   <table>
     <th>Customer</th>
     <th>Ticket ID</th>
@@ -29,33 +36,37 @@
     </tr>
     {% endfor %}
   </table>   
+  {% if error %}
+    <p class="error"><strong>Error:</strong> {{error}}</p>
+  {% endif %}  
+</div>
+
+<div>
+  <h3><a href="/purchasePageAgent">Purchase</a></h3>
 </div>
 <div>
-  <a href="/purchasePageAgent">Purchase</a>
-</div>
-<div>
-  <a href="/searchPageAgent">Search Flight</a>
+  <h3><a href="/searchPageAgent">Search Flight</a></h3>
 </div>    
 <div>
-  <a href="">View Commission</a>
+  <h3>My Commission</h3>
   <div>
     <span>Total amount of commission received in the past 30 days:</span> {{totalComm}} <br>
     <span>Average commission received per ticket booked in the past 30 days:</span> {{avgComm}} <br>
     <span>Total number of tickets sold in the past 30 days</span>: {{ticketCount}}<br>
   </div>
-
+  <h4>View Commision for Specified Duration</h4>
   <div>
     <form action="/commission" method="POST">
     From 
     <input type="date" name = "fromdate" placeholder="date" required> <br>
     To
-    <input type="date" name = "todate" placeholder="date" required> <br> 
+    <input type="date" name = "todate" placeholder="date" required> <br><br>
     <input type="submit" value=View>   
     </form>
   </div>
-
 </div>      
 
+<br><br>
 <a href="/logout">Logout</a>
 
 </body>

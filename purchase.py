@@ -4,16 +4,16 @@ import string, sys, random
 
 from appdef import app, conn
 
-@app.route('/purchasePage')
+@app.route('/purchasePageCustomer')
 def purchasePage():
-  return render_template('purchase.html')
+  return render_template('purchaseCustomer.html')
 
 @app.route('/purchasePageAgent')
 def purchasePageAgent():
   return render_template('purchaseAgent.html')
 
-@app.route('/searchPurchase', methods=['POST'])
-def searchPurchase():
+@app.route('/searchPurchaseCustomer', methods=['POST'])
+def searchPurchaseCustomer():
   cursor = conn.cursor()
   fromcity = request.form['fromcity']
   fromairport = request.form['fromairport']
@@ -44,11 +44,11 @@ def searchPurchase():
   cursor.close()
   error = None
   if(data):
-    return render_template('purchase.html', results=data)
+    return render_template('purchaseCustomer.html', results=data)
   else:
     #returns an error message to the html page
     error = 'No results found'
-    return render_template('purchase.html', error=error) 
+    return render_template('purchaseCustomer.html', searchError=error) 
 
 # Thought it works, not really...
 # def _genTix(ticketCount, airline_name, flight_num):
@@ -69,8 +69,8 @@ def _genTix():
     cand = random.randint(1, 2147483647)
   return cand
 
-@app.route('/purchase', methods=['POST'])
-def purchase():
+@app.route('/purchaseCustomer', methods=['POST'])
+def purchaseCustomer():
   username = session['username']
   cursor = conn.cursor()
   airline_name = request.form['airline_name']
@@ -85,23 +85,24 @@ def purchase():
     ticketCountVal = ticketCount['count']
   # ticket_id = _genTix(ticketCountVal, airline_name.strip().replace(' ', ''), flight_num)
   ticket_id = _genTix()
-  print("WHAT FUCKING NUMBER: ", ticket_id)
+  # print("WHAT FUCKING NUMBER: ", ticket_id)
   # Create the new ticket
   queryNewTicket = 'INSERT INTO ticket VALUES(%s, %s, %s)'
   cursor.execute(queryNewTicket, (ticket_id, airline_name, flight_num))
   # Finalize the purchase
   queryPurchase = 'INSERT INTO purchases VALUES(%s, %s, %s, CURDATE())'
-  cursor.execute(queryPurchase, (ticket_id, username, 'null'))
+  cursor.execute(queryPurchase, (ticket_id, username, None))
   data = cursor.fetchone()
   conn.commit()
   cursor.close()
   error = None
-  if(data):
-    return render_template('customer.html', results=data)
-  else:
-    #returns an error message to the html page
-    error = 'Cannot complete purchase'
-    return render_template('purchase.html', error=error)     
+  # if(data):
+  #   return render_template('customer.html', results=data)
+  # else:
+  #   #returns an error message to the html page
+  #   error = 'Cannot complete purchase'
+    # return render_template('purchaseCustomer.html', purchaseError=error)     
+  return render_template('purchaseCustomer.html')     
 
 @app.route('/searchPurchaseAgent', methods=['POST'])
 def searchPurchaseAgent():
@@ -141,7 +142,7 @@ def searchPurchaseAgent():
   else:
     #returns an error message to the html page
     error = 'No results found'
-    return render_template('purchaseAgent.html', error=error) 
+    return render_template('purchaseAgent.html', searchError=error) 
 
 @app.route('/purchaseAgent', methods=['POST'])
 def purchaseAgent():

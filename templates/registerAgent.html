@@ -1,17 +1,20 @@
 <html>
 <head>
+  <title>registerAgent</title>
 </head>
 <body>
+<h1>Register as Booking Agent</h1>
 <form action="/registerAuthAgent" method="POST">
-  <input type="text" name = "email" placeholder="email" required/> </br>
-  <input type="password" name = "password" placeholder="password" required/></br>
-  <input type="number" name = "booking_agent_id" placeholder="booking_agent_id" required/></br>
+  Email <br><input type="text" name = "email" placeholder="email" required/> </br><br>
+  Password <br><input type="password" name = "password" placeholder="password" required/></br><br>
+  Booking Agent ID <br><input type="number" name = "booking_agent_id" placeholder="booking_agent_id" required/></br><br>
   <input type="submit" value = Register />
   {% if error %}
     <p class="error"><strong>Error:</strong> {{error}}</p>
   {% endif %}
 </form>
 
+<br><br>
 <a href="/">Go back</a>
 
 </body>
