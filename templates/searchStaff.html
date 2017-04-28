@@ -11,6 +11,7 @@
 
 <h2>View Flights</h2>
 
+<b>Upcoming Flights</b>
 <table>
 	<th>airline_name</th>
 	<th>flight_num</th>
@@ -60,6 +61,14 @@
     <input type="datetime-local" name="begintime" step=1 required/> </br>
     Ending Time:
     <input type="datetime-local" name="endtime" step=1 required/> </br>
+    <input type="submit" value = Search />
+
+</form>
+
+<form action="/staffHome/searchFlights/customers" method="POST">
+
+    Search customers by flight</br>
+    <input type="text" name="flightsearchbox" placeholder="flight number" required/> </br>
     <input type="submit" value = Search />
 
 </form>

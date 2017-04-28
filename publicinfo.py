@@ -18,7 +18,7 @@ def searchForCity():
     data = cursor.fetchall()
     cursor.close()
     error = None
-    if(data):
+    if data:
         return render_template('searchFlights.html', results=data)
     else:
         #returns an error message to the html page
@@ -34,7 +34,7 @@ def searchForAirport():
     data = cursor.fetchall()
     cursor.close()
     error = None
-    if(data):
+    if data:
         return render_template('searchFlights.html', results=data)
     else:
         #returns an error message to the html page
@@ -52,7 +52,7 @@ def searchForDate():
     data = cursor.fetchall()
     cursor.close()
     error = None
-    if(data):
+    if data:
         return render_template('searchFlights.html', results=data)
     else:
         #returns an error message to the html page

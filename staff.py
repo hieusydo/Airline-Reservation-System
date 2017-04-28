@@ -30,7 +30,7 @@ def authenticateStaff():
     cursor.execute(query, (username))
     data = cursor.fetchall()
     cursor.close()
-    if(data):
+    if data:
         return True
     else:
         #Logout before returning error message
@@ -78,7 +78,7 @@ def searchFlightsCity():
         data = cursor.fetchall()
         cursor.close()
         error = None
-        if(data):
+        if data:
             return render_template('searchStaffResults.html', results=data)
         else:
             #returns an error message to the html page
@@ -99,7 +99,7 @@ def searchFlightsAirport():
         data = cursor.fetchall()
         cursor.close()
         error = None
-        if(data):
+        if data:
             return render_template('searchStaffResults.html', results=data)
         else:
             #returns an error message to the html page
@@ -122,12 +122,33 @@ def searchFlightsDate():
         data = cursor.fetchall()
         cursor.close()
         error = None
-        if(data):
+        if data:
             return render_template('searchStaffResults.html', results=data)
         else:
             #returns an error message to the html page
             error = 'No results found'
             return redirect(url_for('searchStaffPage', error=error))
+    else:
+        error = 'Invalid Credentials'
+        return redirect(url_for('errorpage', error=error))
+    
+@app.route('/staffHome/searchFlights/customers', methods=['POST'])
+def searchFlightsCustomer():
+    if authenticateStaff():
+        flightnum = request.form['flightsearchbox']
+        airline = getStaffAirline()
+        
+        cursor = conn.cursor()
+        query = 'select customer_email from purchases natural join ticket where flight_num = %s and airline_name=%s'
+        cursor.execute(query, (flightnum, airline))
+        data = cursor.fetchall()
+        cursor.close()
+        if data:
+            return render_template('searchStaffResults.html', customerresults=data, flightnum=flightnum)
+        else:
+            #returns an error message to the html page
+            error = 'No results found'
+            return redirect(url_for('searchFlightsPage', error=error))
     else:
         error = 'Invalid Credentials'
         return redirect(url_for('errorpage', error=error))

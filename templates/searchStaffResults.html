@@ -8,6 +8,8 @@
 	}
 </style>
 
+{% if results %}
+
 <table>
 	<th>airline_name</th>
 	<th>flight_num</th>
@@ -33,6 +35,24 @@
 	</tr>
 {% endfor %}
 </table>
+
+{% endif %}
+
+{% if customerresults %}
+
+<h2>Customers on flight {{flightnum}}</h2>
+
+<table>
+	<th>Customer Email</th>
+	
+{% for line in customerresults %}
+	<tr>
+		<td>{{line.customer_email}}</td>
+	</tr>
+{% endfor %}
+</table>
+
+{% endif %}
 
 <a href="/staffHome/searchFlights">Search again</a>
 
