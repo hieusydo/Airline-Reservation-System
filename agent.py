@@ -32,7 +32,7 @@ def agentHome():
   totalComm = cursor.fetchone()
   totalCommVal = 0
   if totalComm['totalComm'] != None:
-    totalCommVal = ticketCount['ticketCount']
+    totalCommVal = totalComm['totalComm']
   # print totalComm 
   # Get total tickets in the past 30 days 
   queryGetTicketCount = 'SELECT count(*) as ticketCount FROM purchases, ticket, flight \

@@ -22,11 +22,12 @@ def searchPurchaseCustomer():
   toairport = request.form['toairport']
   todate = request.form['todate']
   query = 'SELECT distinct f.airline_name, f.flight_num, departure_airport, departure_time, arrival_airport, arrival_time, price, airplane_id \
-          FROM flight as f, airport, purchases \
+          FROM flight as f, airport \
           WHERE airport.airport_name=f.departure_airport \
           AND airport.airport_city = %s \
           AND airport.airport_name = %s \
-          AND f.departure_time BETWEEN %s AND %s \
+          AND %s BETWEEN DATE_SUB(f.departure_time, INTERVAL 2 DAY) AND DATE_ADD(f.departure_time, INTERVAL 2 DAY)\
+          AND %s BETWEEN DATE_SUB(f.arrival_time, INTERVAL 2 DAY) AND DATE_ADD(f.arrival_time, INTERVAL 2 DAY)\
           AND (f.airline_name, f.flight_num) in \
             (SELECT flight.airline_name, flight.flight_num FROM flight, airport \
             WHERE airport.airport_name=flight.arrival_airport \
@@ -40,6 +41,7 @@ def searchPurchaseCustomer():
               FROM ticket \
               WHERE ticket.airline_name = f.airline_name AND ticket.flight_num = f.flight_num)'
   cursor.execute(query, (fromcity, fromairport, fromdate, todate, tocity, toairport))
+  # print cursor._executed
   data = cursor.fetchall()
   cursor.close()
   error = None
@@ -95,13 +97,6 @@ def purchaseCustomer():
   data = cursor.fetchone()
   conn.commit()
   cursor.close()
-  error = None
-  # if(data):
-  #   return render_template('customer.html', results=data)
-  # else:
-  #   #returns an error message to the html page
-  #   error = 'Cannot complete purchase'
-    # return render_template('purchaseCustomer.html', purchaseError=error)     
   return render_template('purchaseCustomer.html')     
 
 @app.route('/searchPurchaseAgent', methods=['POST'])
@@ -114,11 +109,12 @@ def searchPurchaseAgent():
   toairport = request.form['toairport']
   todate = request.form['todate']
   query = 'SELECT distinct f.airline_name, f.flight_num, departure_airport, departure_time, arrival_airport, arrival_time, price, airplane_id \
-          FROM flight as f, airport, purchases \
+          FROM flight as f, airport \
           WHERE airport.airport_name=f.departure_airport \
           AND airport.airport_city = %s \
           AND airport.airport_name = %s \
-          AND f.departure_time BETWEEN %s AND %s \
+          AND %s BETWEEN DATE_SUB(f.departure_time, INTERVAL 2 DAY) AND DATE_ADD(f.departure_time, INTERVAL 2 DAY)\
+          AND %s BETWEEN DATE_SUB(f.arrival_time, INTERVAL 2 DAY) AND DATE_ADD(f.arrival_time, INTERVAL 2 DAY)\
           AND (f.airline_name, f.flight_num) in \
             (SELECT flight.airline_name, flight.flight_num FROM flight, airport \
             WHERE airport.airport_name=flight.arrival_airport \
@@ -133,6 +129,7 @@ def searchPurchaseAgent():
               WHERE ticket.airline_name = f.airline_name AND ticket.flight_num = f.flight_num)'
 
   cursor.execute(query, (fromcity, fromairport, fromdate, todate, tocity, toairport))
+  # print cursor._executed
   data = cursor.fetchall()
   cursor.close()
   error = None

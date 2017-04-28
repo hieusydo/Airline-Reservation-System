@@ -12,7 +12,7 @@ def customerHome():
   WHERE purchases.ticket_id = ticket.ticket_id \
   AND ticket.airline_name = flight.airline_name \
   AND ticket.flight_num = flight.flight_num \
-  AND customer_email = %s AND departure_time > curdate()'
+  AND customer_email = %s AND departure_time >= curdate()'
   cursor.execute(query, (username))
   data = cursor.fetchall()
   cursor.close()  
@@ -23,7 +23,7 @@ def searchPageCustomer():
   return render_template('searchCustomer.html')
 
 @app.route('/searchCustomer', methods=['POST'])
-def search():
+def searchCustomer():
   username = session['username']
   cursor = conn.cursor()
   fromcity = request.form['fromcity']
