@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, session, url_for, redirect
 import pymysql.cursors
+import string, sys, random
 
 from appdef import app, conn
 
@@ -49,6 +50,25 @@ def searchPurchase():
     error = 'No results found'
     return render_template('purchase.html', error=error) 
 
+# Thought it works, not really...
+# def _genTix(ticketCount, airline_name, flight_num):
+#   pre = [str(flight_num), str(ticketCount+1)]
+#   di = dict(zip(string.letters,[ord(c)%32 for c in string.letters])) # taken from http://stackoverflow.com/a/4535403
+#   for c in airline_name:
+#     pre.append(str(di[c]))
+#   return ''.join(pre)
+
+def _genTix():
+  cursor = conn.cursor()
+  cand = random.randint(1, 2147483647)
+  query = 'SELECT ticket_id FROM ticket'
+  cursor.execute(query)
+  allTix = cursor.fetchall()
+  cursor.close()
+  while cand in allTix:
+    cand = random.randint(1, 2147483647)
+  return cand
+
 @app.route('/purchase', methods=['POST'])
 def purchase():
   username = session['username']
@@ -60,7 +80,12 @@ def purchase():
                 WHERE ticket.airline_name = %s AND ticket.flight_num = %s'
   cursor.execute(queryCount, (airline_name, flight_num))
   ticketCount = cursor.fetchone()
-  ticket_id = ticketCount['count'] + 1
+  ticketCountVal = 0
+  if ticketCount != None:
+    ticketCountVal = ticketCount['count']
+  # ticket_id = _genTix(ticketCountVal, airline_name.strip().replace(' ', ''), flight_num)
+  ticket_id = _genTix()
+  print("WHAT FUCKING NUMBER: ", ticket_id)
   # Create the new ticket
   queryNewTicket = 'INSERT INTO ticket VALUES(%s, %s, %s)'
   cursor.execute(queryNewTicket, (ticket_id, airline_name, flight_num))
@@ -130,7 +155,11 @@ def purchaseAgent():
                 WHERE ticket.airline_name = %s AND ticket.flight_num = %s'
   cursor.execute(queryCount, (airline_name, flight_num))
   ticketCount = cursor.fetchone()
-  ticket_id = ticketCount['count'] + 1
+  ticketCountVal = 0
+  if ticketCount != None:
+    ticketCountVal = ticketCount['count']  
+  # ticket_id = _genTix(ticketCountVal, airline_name.strip().replace(' ', ''), flight_num)
+  ticket_id = _genTix()
   # Create the new ticket
   queryNewTicket = 'INSERT INTO ticket VALUES(%s, %s, %s)'
   cursor.execute(queryNewTicket, (ticket_id, airline_name, flight_num))

@@ -37,8 +37,7 @@ def agentHome():
                         WHERE purchases.ticket_id = ticket.ticket_id \
                         AND ticket.airline_name = flight.airline_name AND ticket.flight_num = flight.flight_num \
                         AND purchases.purchase_date BETWEEN DATE_SUB(CURDATE(), INTERVAL 30 DAY) AND CURDATE() \
-                        AND purchases.booking_agent_id = %s \
-                        GROUP BY purchases.ticket_id'
+                        AND purchases.booking_agent_id = %s'
   cursor.execute(queryGetTicketCount, agentID['booking_agent_id'])
   ticketCount = cursor.fetchone()
   ticketCountVal = 0
@@ -122,8 +121,7 @@ def commission():
                         WHERE purchases.ticket_id = ticket.ticket_id \
                         AND ticket.airline_name = flight.airline_name AND ticket.flight_num = flight.flight_num \
                         AND purchases.purchase_date BETWEEN CAST(%s AS DATE) AND CAST(%s AS DATE) \
-                        AND purchases.booking_agent_id = %s \
-                        GROUP BY purchases.ticket_id'
+                        AND purchases.booking_agent_id = %s'
   cursor.execute(queryGetTicketCount, (fromdate, todate, agentID['booking_agent_id']))
   ticketCount = cursor.fetchone()
   ticketCountVal = 0
