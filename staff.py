@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, session, redirect, url_for
 import pymysql.cursors
+import datetime
 
 from appdef import *
 
@@ -406,6 +407,64 @@ def viewCustomers():
         
         return render_template('viewCustomersResults.html', results=data, customer=customer)
         
+    else:
+        error = "Invalid Credentials"
+        return redirect(url_for('errorpage', error=error))
+    
+@app.route('/staffHome/viewReports')
+def viewReportsPage():
+    if authenticateStaff():
+        airline = getStaffAirline()
+        currentmonth = datetime.datetime.now().month
+        monthtickets = []
+        
+        cursor = conn.cursor()
+        for i in range(1, 13):
+            query = 'select count(ticket_id) as sales from purchases natural join ticket where year(purchase_date) = year(curdate() - interval ' + str(i) + ' month) and month(purchase_date) = month(curdate() - interval ' + str(i) + ' month) and airline_name=%s'
+            cursor.execute(query, (airline))
+            data = cursor.fetchall()
+            salemonth = ((currentmonth - i) % 12) + 1
+            
+            monthtickets.append([data[0]['sales'], salemonth])
+        
+        cursor.close()
+        
+        return render_template('viewReports.html', results=monthtickets)
+    else:
+        error = "Invalid Credentials"
+        return redirect(url_for('errorpage', error=error))
+        
+@app.route('/staffHome/viewReports/dates', methods=['POST'])
+def viewReportsDates():
+    if authenticateStaff():
+        airline = getStaffAirline()
+        begintime = request.form['begintime']
+        endtime = request.form['endtime']
+        
+        cursor = conn.cursor()
+        query = 'select count(ticket_id) as sales from purchases natural join ticket where airline_name=%s and purchase_date between %s and %s'
+        cursor.execute(query, (airline, begintime, endtime))
+        data = cursor.fetchall()
+        cursor.close()
+        
+        return render_template('viewReportsResults.html', sales=data[0]['sales'], begintime=begintime, endtime=endtime)
+    else:
+        error = "Invalid Credentials"
+        return redirect(url_for('errorpage', error=error))
+    
+@app.route('/staffHome/viewReports/past', methods=['POST'])
+def viewReportsPast():
+    if authenticateStaff():
+        airline = getStaffAirline()
+        daterange = request.form['range']
+        
+        cursor = conn.cursor()
+        query = 'select count(ticket_id) as sales from purchases natural join ticket where airline_name=%s and purchase_date >= date_sub(curdate(), interval 1 ' + daterange + ')'
+        cursor.execute(query, (airline))
+        data = cursor.fetchall()
+        cursor.close()
+        
+        return render_template('viewReportsPast.html', sales=data[0]['sales'], datetime=daterange)
     else:
         error = "Invalid Credentials"
         return redirect(url_for('errorpage', error=error))
