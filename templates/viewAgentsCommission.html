@@ -1,0 +1,30 @@
+<html>
+<head>
+</head>
+<body>
+<style type="text/css">
+	table, th, td{
+		border: 1px solid black;
+	}
+</style>
+
+<h2> Top 5 Agents by Total Commission (last year) </h2>
+
+<table>
+	<th>Booking Agent</th>
+	<th>Total Commisison</th>
+	
+{% for line in results %}
+	<tr>
+		<td>{{line.email}}</td>
+		<td>{{line.commission}}</td>
+	</tr>
+{% endfor %}
+</table>
+
+<a href="/staffHome/viewAgents">Search again</a>
+
+</body>
+
+
+</html>

@@ -1,0 +1,22 @@
+<html>
+<head>
+</head>
+<body>
+<h2>Add Airport</h2>
+
+<form action="/staffHome/addAirport/Auth" method="POST">
+  <input type="text" name = "name" placeholder="Airport Name" required/> </br>
+  <input type="text" name = "city" placeholder="City" required/> </br>
+  
+  <input type="submit" value = Submit />
+	{% if error %}
+		<p class="error"><strong>Error:</strong> {{error}}</p>
+	{% endif %}
+</form>
+
+<a href="/staffHome">Go back</a>
+
+</body>
+
+
+</html>

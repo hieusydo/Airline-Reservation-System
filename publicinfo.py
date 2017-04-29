@@ -13,12 +13,12 @@ def searchpage():
 def searchForCity():
     cursor = conn.cursor()
     searchtext = request.form['citysearchbox']
-    query = 'select * from flight,airport where (airport.airport_name=flight.departure_airport or airport.airport_name=flight.arrival_airport) and airport.airport_city=%s and status="upcoming"'
+    query = 'select * from flight,airport where (airport.airport_name=flight.departure_airport or airport.airport_name=flight.arrival_airport) and airport.airport_city=%s and (departure_time >= curtime() or arrival_time >= curtime())'
     cursor.execute(query, (searchtext))
     data = cursor.fetchall()
     cursor.close()
     error = None
-    if(data):
+    if data:
         return render_template('searchFlights.html', results=data)
     else:
         #returns an error message to the html page
@@ -29,12 +29,12 @@ def searchForCity():
 def searchForAirport():
     cursor = conn.cursor()
     searchtext = request.form['airportsearchbox']
-    query = 'select * from flight where (departure_airport = %s or arrival_airport = %s) and status="upcoming"'
+    query = 'select * from flight where (departure_airport = %s or arrival_airport = %s) and (departure_time >= curtime() or arrival_time >= curtime())'
     cursor.execute(query, (searchtext, searchtext))
     data = cursor.fetchall()
     cursor.close()
     error = None
-    if(data):
+    if data:
         return render_template('searchFlights.html', results=data)
     else:
         #returns an error message to the html page
@@ -43,20 +43,16 @@ def searchForAirport():
 
 @app.route('/searchFlights/date', methods=['POST'])
 def searchForDate():
-    cursor = conn.cursor()
-    searchtext = request.form['datesearchbox']
-    try:
-        valid_date = time.strptime(searchtext, '%Y/%m/%d')
-    except ValueError:
-        error = 'Invalid date entered'
-        return redirect(url_for('searchpage', error=error))
+    begintime = request.form['begintime']
+    endtime = request.form['endtime']
     
-    query = 'select * from flight where (date(departure_time) = %s or date(arrival_time) = %s) and status="upcoming"'
-    cursor.execute(query, (searchtext, searchtext))
+    cursor = conn.cursor()
+    query = 'select * from flight where ((departure_time between %s and %s) or (arrival_time between %s and %s)) and (departure_time >= curtime() or arrival_time >= curtime())'
+    cursor.execute(query, (begintime, endtime, begintime, endtime))
     data = cursor.fetchall()
     cursor.close()
     error = None
-    if(data):
+    if data:
         return render_template('searchFlights.html', results=data)
     else:
         #returns an error message to the html page

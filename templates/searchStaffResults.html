@@ -1,0 +1,61 @@
+<html>
+<head>
+</head>
+<body>
+<style type="text/css">
+	table, th, td{
+		border: 1px solid black;
+	}
+</style>
+
+{% if results %}
+
+<table>
+	<th>airline_name</th>
+	<th>flight_num</th>
+	<th>departure_airport</th>
+	<th>departure_time</th>
+	<th>arrival_airport</th>
+	<th>arrival_time</th>
+	<th>price</th>
+	<th>status</th>
+	<th>airplane_id</th>
+	
+{% for line in results %}
+	<tr>
+		<td>{{line.airline_name}}</td>
+		<td>{{line.flight_num}}</td>
+		<td>{{line.departure_airport}}</td>
+		<td>{{line.departure_time}}</td>
+		<td>{{line.arrival_airport}}</td>
+		<td>{{line.arrival_time}}</td>
+		<td>{{line.price}}</td>
+		<td>{{line.status}}</td>
+		<td>{{line.airplane_id}}</td>
+	</tr>
+{% endfor %}
+</table>
+
+{% endif %}
+
+{% if customerresults %}
+
+<h2>Customers on flight {{flightnum}}</h2>
+
+<table>
+	<th>Customer Email</th>
+	
+{% for line in customerresults %}
+	<tr>
+		<td>{{line.customer_email}}</td>
+	</tr>
+{% endfor %}
+</table>
+
+{% endif %}
+
+<a href="/staffHome/searchFlights">Search again</a>
+
+</body>
+
+</html>

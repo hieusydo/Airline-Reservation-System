@@ -1,0 +1,41 @@
+<html>
+<head>
+</head>
+<body>
+
+<h2>View Customers</h2>
+
+<style type="text/css">
+	table, th, td{
+		border: 1px solid black;
+	}
+</style>
+
+<b>Most Frequent Customer</b>
+<table>
+	<th>Email</th>
+	<th>Tickets Bought</th>
+	
+{% for line in results %}
+	<tr>
+		<td>{{line.email}}</td>
+		<td>{{line.customerpurchases}}</td>
+	</tr>
+{% endfor %}
+</table></br>
+
+<form action="/staffHome/viewCustomers/results" method="POST">
+
+    View Flights Taken</br>
+    <input type="text" name = "email" placeholder="Customer Email" required/> </br>
+    <input type="submit" value = Search />
+
+</form>
+
+</br>
+<a href="/staffHome">Go back</a>
+
+</body>
+
+
+</html>
