@@ -419,12 +419,16 @@ def viewReportsPage():
         monthtickets = []
         
         cursor = conn.cursor()
-        for i in range(1, 13):
-            query = 'select count(ticket_id) as sales from purchases natural join ticket where year(purchase_date) = year(curdate() - interval ' + str(i) + ' month) and month(purchase_date) = month(curdate() - interval ' + str(i) + ' month) and airline_name=%s'
+        for i in range(0, 12):
+            query = 'select count(ticket_id) as sales \
+            from purchases natural join ticket \
+            where year(purchase_date) = year(curdate() - interval ' + str(i) + ' month) \
+            and month(purchase_date) = month(curdate() - interval ' + str(i) + ' month) \
+            and airline_name=%s'
             cursor.execute(query, (airline))
             data = cursor.fetchall()
-            salemonth = ((currentmonth - i) % 12) + 1
-            
+            salemonth = ((currentmonth - (i+1)) % 12) + 1
+            print data[0]['sales']
             monthtickets.append([data[0]['sales'], salemonth])
         
         cursor.close()
@@ -447,7 +451,7 @@ def viewReportsDates():
         data = cursor.fetchall()
         cursor.close()
         
-        return render_template('viewReportsResults.html', sales=data[0]['sales'], begintime=begintime, endtime=endtime)
+        return render_template('viewReportsDate.html', sales=data[0]['sales'], begintime=begintime, endtime=endtime)
     else:
         error = "Invalid Credentials"
         return redirect(url_for('errorpage', error=error))
