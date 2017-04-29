@@ -1,0 +1,52 @@
+<html>
+<head>
+</head>
+<body>
+
+<h2>View Reports</h2>
+
+<style>
+.chart div {
+  font: 10px sans-serif;
+  background-color: steelblue;
+  text-align: right;
+  padding: 3px;
+  margin: 1px;
+  color: white;
+}
+</style>
+<div class="chart">
+    {% for line in results %}
+  <div style="width: {{line[0] * 10}}px;">{{line[1]}}</div>
+    {% endfor %}
+  
+</div>
+
+</br>
+<form action="/staffHome/viewReports/past" method="POST">
+    Search stats in the past...
+    <input type="radio" name="range" value="month" required> Month
+    <input type="radio" name="range" value="year" required> Year</br>
+    <input type="submit" value = Search />
+</form>
+
+<form action="/staffHome/viewReports/dates" method="POST">
+    Search stats between dates</br>
+    Starting Time:
+    <input type="datetime-local" name="begintime" step=1 required/> </br>
+    Ending Time:
+    <input type="datetime-local" name="endtime" step=1 required/> </br>
+    <input type="submit" value = Search />
+</form>
+
+{% if error %}
+        <p class="error"><strong>Error:</strong> {{error}}</p>
+{% endif %}
+
+</br>
+<a href="/staffHome">Go back</a>
+
+</body>
+
+
+</html>
