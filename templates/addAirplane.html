@@ -1,0 +1,22 @@
+<html>
+<head>
+</head>
+<body>
+<h2>Add Airplane</h2>
+
+<form action="/staffHome/addAirplane/confirm" method="POST">
+  <input type="number" name = "id" placeholder="Airplane ID" required/> </br>
+  <input type="number" name = "seats" placeholder="Number of Seats" required/> </br>
+  
+  <input type="submit" value = Submit />
+	{% if error %}
+		<p class="error"><strong>Error:</strong> {{error}}</p>
+	{% endif %}
+</form>
+
+<a href="/staffHome">Go back</a>
+
+</body>
+
+
+</html>

@@ -1,0 +1,85 @@
+<html>
+<head>
+</head>
+<body>
+
+<style type="text/css">
+	table, th, td{
+		border: 1px solid black;
+	}
+</style>
+
+<h2>View Flights</h2>
+
+<b>Upcoming Flights</b>
+<table>
+	<th>airline_name</th>
+	<th>flight_num</th>
+	<th>departure_airport</th>
+	<th>departure_time</th>
+	<th>arrival_airport</th>
+	<th>arrival_time</th>
+	<th>price</th>
+	<th>status</th>
+	<th>airplane_id</th>
+	
+{% for line in results %}
+	<tr>
+		<td>{{line.airline_name}}</td>
+		<td>{{line.flight_num}}</td>
+		<td>{{line.departure_airport}}</td>
+		<td>{{line.departure_time}}</td>
+		<td>{{line.arrival_airport}}</td>
+		<td>{{line.arrival_time}}</td>
+		<td>{{line.price}}</td>
+		<td>{{line.status}}</td>
+		<td>{{line.airplane_id}}</td>
+	</tr>
+{% endfor %}
+</table></br>
+
+<form action="/staffHome/searchFlights/city" method="POST">
+	
+	Search by city (arrival or departure)</br>
+	<input type="text" name = "citysearchbox" placeholder="search by city" required/> </br>
+	<input type="submit" value = Search />
+
+</form>
+
+<form action="/staffHome/searchFlights/airport" method="POST">
+
+        Search by airport (arrival or departure)</br>
+	<input type="text" name = "airportsearchbox" placeholder="search by airport" required/> </br>
+	<input type="submit" value = Search />
+
+</form>
+
+<form action="/staffHome/searchFlights/date" method="POST">
+
+    Search by date (arrival or departure)</br>
+    Starting Time: 
+    <input type="datetime-local" name="begintime" step=1 required/> </br>
+    Ending Time:
+    <input type="datetime-local" name="endtime" step=1 required/> </br>
+    <input type="submit" value = Search />
+
+</form>
+
+<form action="/staffHome/searchFlights/customers" method="POST">
+
+    Search customers by flight</br>
+    <input type="text" name="flightsearchbox" placeholder="flight number" required/> </br>
+    <input type="submit" value = Search />
+
+</form>
+
+{% if error %}
+        <p class="error"><strong>Error:</strong> {{error}}</p>
+{% endif %}
+
+<a href="/staffHome">Go back</a>
+
+</body>
+
+
+</html>
