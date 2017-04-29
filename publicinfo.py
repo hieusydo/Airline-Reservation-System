@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for
 import pymysql.cursors
 import time
 
-from appdef import app, conn
+from appdef import *
 
 @app.route('/search')
 def searchpage():
@@ -45,6 +45,10 @@ def searchForAirport():
 def searchForDate():
     begintime = request.form['begintime']
     endtime = request.form['endtime']
+    
+    if not validateDates(begintime, endtime):
+        error = 'Invalid date range'
+        return redirect(url_for('searchpage', error=error))
     
     cursor = conn.cursor()
     query = 'select * from flight where ((departure_time between %s and %s) or (arrival_time between %s and %s)) and (departure_time >= curtime() or arrival_time >= curtime())'

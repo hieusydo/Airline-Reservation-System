@@ -115,6 +115,11 @@ def searchFlightsDate():
     if authenticateStaff():
         begintime = request.form['begintime']
         endtime = request.form['endtime']
+        
+        if not validateDates(begintime, endtime):
+            error = 'Invalid date range'
+            return redirect(url_for('searchStaffPage', error=error))
+        
         airline = getStaffAirline()
         
         cursor = conn.cursor()
@@ -192,6 +197,11 @@ def createFlight():
     price = request.form['price']
     status = "Upcoming"
     airplaneid = request.form['airplanenum']
+    
+    if not validateDates(departtime, arrivetime):
+            error = 'Invalid date range'
+            return redirect(url_for('createFlightPage', error=error))
+    
     airline = getStaffAirline()
     
     #Check that airplane is valid
@@ -446,6 +456,10 @@ def viewReportsDates():
         airline = getStaffAirline()
         begintime = request.form['begintime']
         endtime = request.form['endtime']
+        
+        if not validateDates(begintime, endtime):
+            error = 'Invalid date range'
+            return redirect(url_for('viewReportsPage', error=error))
         
         cursor = conn.cursor()
         query = 'select count(ticket_id) as sales from purchases natural join ticket where airline_name=%s and purchase_date between %s and %s'
