@@ -11,28 +11,22 @@ import agent
 import staff
 import purchase
 
+# Understanding Flask static: http://stackoverflow.com/a/28208187
+app = Flask(__name__, static_url_path='')
+
 #Define a route to hello function
 @app.route('/')
 def hello():
   return render_template('index.html')
 
-@app.route('/post', methods=['GET', 'POST'])
-def post():
-  username = session['username']
-  cursor = conn.cursor();
-  blog = request.form['blog']
-  query = 'INSERT INTO blog (blog_post, username) VALUES(%s, %s)'
-  cursor.execute(query, (blog, username))
-  conn.commit()
-  cursor.close()
-  return redirect(url_for('home'))
-
 @app.route('/logout')
 def logout():
   session.pop('username')
-  return redirect('/')
-    
-app.secret_key = 'some key that you will never guess'
+  return redirect('/login')
+
+# Why secret_key? http://stackoverflow.com/a/22463969
+app.secret_key = 'S4p9Z#Z3vjw!@J66'
+
 #Run the app on localhost port 5000
 #debug = True -> you don't have to restart flask
 #for changes to go through, TURN OFF FOR PRODUCTION
