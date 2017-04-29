@@ -12,7 +12,7 @@ import staff
 import purchase
 
 # Understanding Flask static: http://stackoverflow.com/a/28208187
-app = Flask(__name__, static_url_path='')
+# app = Flask(__name__)
 
 #Define a route to hello function
 @app.route('/')

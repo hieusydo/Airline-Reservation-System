@@ -223,7 +223,7 @@ def changeFlightStatus():
         return redirect(url_for('errorpage', error=error))
     
     username = session['username']
-    
+    cursor = conn.cursor()
     flightnum = request.form['flightnum']
     status = request.form['status']
     if not status:
@@ -373,8 +373,16 @@ def viewCustomersPage():
         airline = getStaffAirline()
         
         cursor = conn.cursor()
-        query = 'select email,count(ticket_id) as customerpurchases from customer, (purchases natural join ticket) where customer.email=purchases.customer_email and airline_name=%s and purchase_date >= date_sub(curdate(), interval 1 year) group by email having count(ticket_id) > all (select count(ticket_id) from customer,purchases where customer.email=purchases.customer_email group by email and purchase_date >= date_sub(curdate(), interval 1 year))'
-        cursor.execute(query, (airline))
+        query = 'select customer_email, count(ticket_id) as customerpurchases \
+                from purchases natural join ticket \
+                where airline_name= %s \
+                and purchase_date >= date_sub(curdate(), interval 1 year) group by customer_email \
+                having customerpurchases \
+                  >= all (select count(ticket_id) \
+                  from purchases natural join ticket \
+                  where airline_name = %s \
+                  and purchase_date >= date_sub(curdate(), interval 1 year) GROUP by customer_email)'
+        cursor.execute(query, (airline, airline))
         data = cursor.fetchall()
         cursor.close()
         
@@ -384,7 +392,7 @@ def viewCustomersPage():
         error = "Invalid Credentials"
         return redirect(url_for('errorpage', error=error))
 
-@app.route('/staffHome/viewCustomers/result', methods=['POST'])
+@app.route('/staffHome/viewCustomers/results', methods=['POST'])
 def viewCustomers():
     if authenticateStaff():
         airline = getStaffAirline()
@@ -396,7 +404,7 @@ def viewCustomers():
         data = cursor.fetchall()
         cursor.close()
         
-        return render_template('viewCustomersResult.html', results=data, customer=customer)
+        return render_template('viewCustomersResults.html', results=data, customer=customer)
         
     else:
         error = "Invalid Credentials"
