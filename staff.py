@@ -157,13 +157,15 @@ def searchFlightsCustomer():
 @app.route('/staffHome/createFlight')
 def createFlightPage():
     if authenticateStaff():
+        airline = getStaffAirline()
+        
         cursor = conn.cursor()
-        query = 'select airport_name from airport'
+        query = 'select distinct airport_name from airport'
         cursor.execute(query)
         airportdata = cursor.fetchall()
         
-        query = 'select airplane_id from airplane'
-        cursor.execute(query)
+        query = 'select distinct airplane_id from airplane where airline_name=%s'
+        cursor.execute(query, (airline))
         airplanedata = cursor.fetchall()
         
         cursor.close()
@@ -188,7 +190,7 @@ def createFlight():
     arriveport = request.form['arriveport']
     arrivetime = request.form['arrivetime']
     price = request.form['price']
-    status = request.form['status']
+    status = "Upcoming"
     airplaneid = request.form['airplanenum']
     airline = getStaffAirline()
     
