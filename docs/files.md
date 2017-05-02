@@ -1,0 +1,41 @@
+# All files
+Brief description of what each file does
+
+- `static/`
+  - `bg.jpg` background picture for homepage
+- `templates/` all htmls files
+  - `addAirplane.html`
+  - `addAirplaneConfirm.html`
+  - `addAirport.html`
+  - `agent.html` main page for booking agent
+  - `changeFlight.html` 
+  - `commission.html` page to show commision in a specify time range
+  - `createFlight.html`
+  - `customer.html` main page for customer
+  - `error.html`
+  - `index.html` main page of the app
+  - `login.html` login page of the app
+  - `purchaseAgent.html`, `purchaseCustomer.html` page for booking agent and customer to purchase tickets
+  - `registerAgent.html`, `registerCustomer.html`, `registerStaff.html` register page for booking agent, customer, and airline staff
+  - `search.html` 
+  - `searchFlights.html`
+  - `searchAgent.html`, `searchCustomer.html`, `searchStaff.html` page for agent, customer and staff
+  - `searchStaffResults.html`
+  - `staff.html` main page for staff
+  - `viewAgents.html` 
+  - `viewAgentsCommission.html`
+  - `viewAgentsSales.html`
+  - `viewCustomers.html`
+  - `viewCustomersResults.html`
+  - `viewReports.html`
+  - `viewReportsDate.html`
+  - `viewReportsPast.html`
+- `agent.py` functions for agent's home page to: 1) get ticket counts, commission 2) search through flights
+- `appdef.py` defines the configurations of the app
+- `customer.py` functions for customers to: 1) view all flights 2) search through flights
+- `init.py` initialize the app
+- `login.py` login authentication
+- `publicinfo.py`
+- `purchase.py`
+- `register.py` register functions for customer, agent, and staff
+- `staff.py`
