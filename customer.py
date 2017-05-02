@@ -12,7 +12,7 @@ def customerHome():
   WHERE purchases.ticket_id = ticket.ticket_id \
   AND ticket.airline_name = flight.airline_name \
   AND ticket.flight_num = flight.flight_num \
-  AND customer_email = %s AND departure_time >= curdate()'
+  AND customer_email = %s AND departure_time > curdate()'
   cursor.execute(query, (username))
   data = cursor.fetchall()
   cursor.close()  
@@ -39,7 +39,7 @@ def searchCustomer():
           AND purchases.customer_email = %s\
           AND airport.airport_city = %s \
           AND airport.airport_name = %s \
-          AND flight.status = "Upcoming"\
+          # AND flight.status = "Upcoming"\
           AND %s BETWEEN DATE_SUB(flight.departure_time, INTERVAL 2 DAY) AND DATE_ADD(flight.departure_time, INTERVAL 2 DAY) \
           AND %s BETWEEN DATE_SUB(flight.arrival_time, INTERVAL 2 DAY) AND DATE_ADD(flight.arrival_time, INTERVAL 2 DAY) \
           AND (flight.airline_name, flight.flight_num) in \
