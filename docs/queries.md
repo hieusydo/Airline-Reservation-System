@@ -241,7 +241,7 @@ INSERT INTO airport VALUES (%s, %s)
 
 ### View Agents
 
-List the number of tickets each agent has sold, sorted by number sold
+List the number of tickets each agent has sold, sorted by number sold.
 Extracting the top 5 sellers is done in python
 ```sql
 SELECT email,COUNT(ticket_id) AS sales 
@@ -251,8 +251,8 @@ AND airline_name=%s
 GROUP BY email ORDER BY sales
 ```
 
-List the total commission each agent has earned, sorted by highest earned
-Assumes 10% commission, and extracting top 5 sellers is done in python
+List the total commission each agent has earned, sorted by highest earned.
+Assumes 10% commission, and extracting top 5 sellers is done in python.
 ```sql
 SELECT email,SUM(flight.price)*0.1 AS commission
 FROM booking_agent NATURAL JOIN purchases NATURAL JOIN ticket NATURAL JOIN flight
@@ -288,10 +288,10 @@ AND customer_email=%s
 
 ### View Reports
 
-Gets the number of tickets sold in each month for last year
-Used to generate the bar graph in the home page for viewing reports
+Gets the number of tickets sold in each month for last year.
+Used to generate the bar graph in the home page for viewing reports.
 Query is run 12 times, once for each month. Each loop, the current date is
-subtracted by *i* months and all tickets sold in the resulting month is then found
+subtracted by *i* months and all tickets sold in the resulting month is then found.
 ```sql
 SELECT COUNT(ticket_id) AS sales
 FROM purchases NATURAL JOIN ticket
