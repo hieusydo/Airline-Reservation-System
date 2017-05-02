@@ -254,8 +254,8 @@ def changeFlightStatus():
         return redirect(url_for('changeFlightStatusPage', error=error))
     
     #Update the specified flight
-    query = 'update flight set status=%s where flight_num=%s'
-    cursor.execute(query, (status, flightnum))
+    query = 'update flight set status=%s where flight_num=%s and airline_name = %s'
+    cursor.execute(query, (status, flightnum, airline))
     conn.commit()
     cursor.close()
     
