@@ -1,8 +1,8 @@
 -- Test data 
 
 delete from purchases;
-delete from flight;
 delete from ticket;
+delete from flight;
 delete from airport; 
 delete from airline_staff; 
 delete from airplane;  

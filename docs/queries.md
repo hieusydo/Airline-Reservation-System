@@ -89,7 +89,7 @@ AND purchases.booking_agent_id = %s
 
 Get the number of tickets bought in the past 30 days
 ```sql
-ELECT count(*) as ticketCount FROM purchases, ticket, flight 
+SELECT count(*) as ticketCount FROM purchases, ticket, flight 
 WHERE purchases.ticket_id = ticket.ticket_id 
 AND ticket.airline_name = flight.airline_name AND ticket.flight_num = flight.flight_num 
 AND purchases.purchase_date BETWEEN DATE_SUB(CURDATE(), INTERVAL 30 DAY) AND CURDATE() 
@@ -311,8 +311,8 @@ AND purchase_date BETWEEN %s AND %s
 Get the number of tickets sold in either the past year or the past month, whichever
 is selected by the user
 ```sql
-'SELECT COUNT(ticket_id) AS sales 
+SELECT COUNT(ticket_id) AS sales 
 FROM purchases NATURAL JOIN ticket 
 WHERE airline_name=%s 
-AND purchase_date >= DATE_SUB(CURDATE(), INTERVAL 1 ' + daterange + ')'
+AND purchase_date >= DATE_SUB(CURDATE(), INTERVAL 1 ' + daterange + ')
 ```
